@@ -1,11 +1,12 @@
 const Product = require('../models/product');
 const getAllProductsStatic = async (req, res) => {
     try {
-        const search = 'ab';
-        const products = await Product.find({});
-    //     name: { $regex: search, $options: 'i' }
+        // const search = 'ab';
+            //     name: { $regex: search, $options: 'i' }
     //     // i Case insensitivity to match upper and lower cases
     // });
+        const products = await Product.find({});
+
     console.log(req.query);
     res.status(200).json({ products, nbHits: products.length });
     } catch (error) {
@@ -108,10 +109,24 @@ const deleteProduct = async (req, res) => {
         res.status(500).json({ msg: error["errors"]["name"]["message"] });
     }
 };
+
+const getSingleProduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            //return next(createCustomError(`No task with id: ${taskID}`, 404));
+            return res.status(404).json({ msg: `No product with id: ${productID}` });
+        }
+        res.status(200).json({ product });
+    } catch (error) {
+        res.status(500).json({ msg: error["errors"]["name"]["message"] });
+    }
+}
 module.exports = {
     getAllProducts,
     getAllProductsStatic,
     createProduct,
     updateProduct,
     deleteProduct,
+    getSingleProduct,
 };

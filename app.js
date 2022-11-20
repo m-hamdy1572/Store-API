@@ -15,12 +15,20 @@ const errorHandlerMiddleware = require('./middleware/error-handler');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Cros 
+app.use( (req, res, next)=> {
+    res.header("Access-Control-Allow-Origin", '*');
+    res.header("Access-Control-Allow-Credentials", true);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+    next();
+});
 
 app.get('/', (req, res) => {
     res.send('<h1>Store API</h1><a href="/api/v1/products">Products Route</a>')
 })
 
-app.use('/api/v1/products', productsRouter);
+app.use('/api/v1', productsRouter);
 // Products route
 
 
